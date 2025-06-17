@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Lora, sans-serif;
+    background-image: url("../image/background.jpg");
+    background-size: cover;           /* Scales to fill screen */
+    background-position: center;      /* Keeps it centered */
+    background-repeat: no-repeat;     /* Prevents tiling */
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    /*border: crimson 5px solid;*/
+    position: relative;
+    display: flex;
+}
+
+h2{
+    font-size: 36px;
+    position: relative;
+    justify-content: center;
+    display: flex;
+    color: white;
+}
+.form-box{
+    width: 100%;
+    max-width: 900px;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /*border: blue 3px solid;*/
+    backdrop-filter: blur(4px);
+    border-radius: 15px;
+}
+form{
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    align-items: center;
+    /*border: blueviolet 4px solid;*/
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label{
+    color: white;
+    font-size: 22px;
+}
+input{
+    border: none;
+    border-bottom: solid white 1px;
+    outline: 0;
+    background: transparent;
+    width: 100%;
+    max-width: 300px;
+    color: white;
+    font-size: 18px;
+}
+
+button{
+    background: rgba(27, 117, 235, 0.9);
+    border-radius: 15px;
+    opacity: 70%;
+    width: 100px;
+    height: 40px;
+    border:none;
+    font-size: 20px;
+    color:white;
+}
+
+p{
+    font-size: 18px;
+}
