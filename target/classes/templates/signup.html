@@ -5,35 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link th:href="@{/CSS/signupstyle.css}" rel="stylesheet" type="text/css" media="all">
+    <script>
+        // Optional: basic client-side confirm password check
+        function validateForm(event) {
+            const password = document.querySelector('input[name="password"]').value;
+            const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                event.preventDefault();
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="form-box">
     <h2>Sign Up</h2>
 
-<!-- Error Message -->
+    <!-- Error Message -->
     <p th:if="${error}" th:text="${error}" style="color:red;"></p>
 
-<!-- Success Message -->
+    <!-- Success Message -->
     <p th:if="${message}" th:text="${message}" style="color:green;"></p>
 
-    <form th:action="@{/signup}" method="post" th:object="${user}">
-    <label>Username:</label>
-    <input type="text" th:field="*{username}" required />
+    <form th:action="@{/signup}" method="post" th:object="${user}" onsubmit="validateForm(event)">
+        <label>Username:</label>
+        <input type="text" th:field="*{username}" required />
 
-    <label>Email:</label>
-    <input type="email" th:field="*{email}" required />
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required />
 
-    <label>Password:</label>
-    <input type="password" th:field="*{password}" required />
+        <label>Password(At least 8 characters and maximum 16 characters):</label>
+        <input type="password" th:field="*{password}" name="password" required autocomplete="off" />
 
-    <label>Confirm Password:</label>
-    <input type="password" name="confirmPassword" required /><br>
+        <label>Confirm Password:</label>
+        <input type="password" name="confirmPassword" required autocomplete="off" /><br>
 
-    <button type="submit">Sign Up</button>
-
-    <p th:if="${error}" style="color: red" th:text="${error}"></p>
-    <p th:if="${success}" style="color: green" th:text="${success}"></p>
-</form>
+        <button type="submit">Sign Up</button>
+    </form>
 </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package snoopdog.signuppage.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
@@ -12,11 +13,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Username is required")
+    @NotBlank
     private String username;
 
-    @NotEmpty(message = "Email is required")
-    @Email(message = "Email is invalid")
+    @Email
+    @NotBlank
     private String email;
 
     @NotEmpty(message = "Password is required")

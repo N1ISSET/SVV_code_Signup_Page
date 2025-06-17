@@ -3,9 +3,13 @@ package snoopdog.signuppage.controller;
 import snoopdog.signuppage.model.User;
 import snoopdog.signuppage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -13,54 +17,49 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // Show the signup form
+    private final RestTemplate restTemplate = new RestTemplate();
+
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new User());
         return "signup";
     }
 
-    // Process the signup form
     @PostMapping("/signup")
-    public String processSignUp(@ModelAttribute("user") User user,
-                                @RequestParam("confirmPassword") String confirmPassword,
-                                Model model) {
+    public String processSignUp(@ModelAttribute User user, @RequestParam String confirmPassword, Model model) {
 
-        // Check if email already exists
-        if (userRepository.existsByEmail(user.getEmail())) {
-            model.addAttribute("error", "Email already registered!");
+        // ✅ Server-side field validation
+        if (user.getUsername() == null || user.getUsername().isBlank() ||
+                user.getEmail() == null || !user.getEmail().contains("@") ||
+                user.getPassword() == null || user.getPassword().length() < 8 && user.getPassword().length() > 16) {
+            model.addAttribute("error", "Invalid input. Make sure all fields are correctly filled.");
             return "signup";
         }
 
-        // Check if username already exists
-        if (userRepository.existsByUsername(user.getUsername())) {
-            model.addAttribute("error", "Username already taken!");
-            return "signup";
-        }
-
-        // Check if passwords match
+        // ✅ Password confirmation check
         if (!user.getPassword().equals(confirmPassword)) {
-            model.addAttribute("error", "Passwords do not match!");
+            model.addAttribute("error", "Password and confirmation do not match.");
             return "signup";
         }
 
-        // Check password length
-        int passwordLength = user.getPassword().length();
-        if (passwordLength < 6 || passwordLength > 16) {
-            model.addAttribute("error", "Password must be between 6 and 16 characters.");
+        // ✅ Check for existing user by email or username
+        Optional<User> existingUser = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
+        if (existingUser.isPresent()) {
+            model.addAttribute("error", "An account with this username or email already exists.");
             return "signup";
         }
 
-        // Check username length
-        int usernameLength = user.getUsername().length();
-        if (usernameLength < 3 || usernameLength > 16) {
-            model.addAttribute("error", "Username must be between 3 and 16 characters.");
-            return "signup";
+        // ✅ Make a logging API call (handle errors appropriately)
+        try {
+            String loggingUrl = "https://example.com/api/log_signup";
+            ResponseEntity<String> response = restTemplate.postForEntity(loggingUrl, user, String.class);
+            // Optionally check response status
+        } catch (Exception e) {
+            System.err.println("Logging API call failed: " + e.getMessage());
         }
 
-        // Save user to database
         userRepository.save(user);
-        model.addAttribute("success", "Sign up successful!");
+        model.addAttribute("message", "Signup successful!");
         return "signup";
     }
 }
