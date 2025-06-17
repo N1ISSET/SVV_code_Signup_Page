@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 @Controller
-public class UserController {
+public class SignupController {
 
     @Autowired
     private UserRepository userRepository;
@@ -28,7 +28,7 @@ public class UserController {
     @PostMapping("/signup")
     public String processSignUp(@ModelAttribute User user, @RequestParam String confirmPassword, Model model) {
 
-        // ✅ Server-side field validation
+        // Server-side field validation
         if (user.getUsername() == null || user.getUsername().isBlank() ||
                 user.getEmail() == null || !user.getEmail().contains("@") ||
                 user.getPassword() == null || user.getPassword().length() < 8 && user.getPassword().length() > 16) {
@@ -36,22 +36,22 @@ public class UserController {
             return "signup";
         }
 
-        // ✅ Password confirmation check
+        // Password confirmation check
         if (!user.getPassword().equals(confirmPassword)) {
             model.addAttribute("error", "Password and confirmation do not match.");
             return "signup";
         }
 
-        // ✅ Check for existing user by email or username
+        // Check for existing user by email or username
         Optional<User> existingUser = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
         if (existingUser.isPresent()) {
             model.addAttribute("error", "An account with this username or email already exists.");
             return "signup";
         }
 
-        // ✅ Make a logging API call (handle errors appropriately)
+        // Make a logging API call (handle errors appropriately)
         try {
-            String loggingUrl = "https://example.com/api/log_signup";
+            String loggingUrl = "localhost:8080/signin";
             ResponseEntity<String> response = restTemplate.postForEntity(loggingUrl, user, String.class);
             // Optionally check response status
         } catch (Exception e) {
