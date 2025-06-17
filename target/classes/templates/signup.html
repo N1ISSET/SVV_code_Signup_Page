@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link th:href="@{/CSS/signupstyle.css}" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+<div class="form-box">
+    <h2>Sign Up</h2>
+
+<!-- Error Message -->
+    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<!-- Success Message -->
+    <p th:if="${message}" th:text="${message}" style="color:green;"></p>
+
+    <form th:action="@{/signup}" method="post" th:object="${user}">
+    <label>Username:</label>
+    <input type="text" th:field="*{username}" required />
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required />
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" required />
+
+    <label>Confirm Password:</label>
+    <input type="password" name="confirmPassword" required /><br>
+
+    <button type="submit">Sign Up</button>
+
+    <p th:if="${error}" style="color: red" th:text="${error}"></p>
+    <p th:if="${success}" style="color: green" th:text="${success}"></p>
+</form>
+</div>
+</body>
+</html>
