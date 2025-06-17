@@ -34,13 +34,14 @@
         <label>Email:</label>
         <input type="email" th:field="*{email}" required />
 
-        <label>Password(At least 8 characters and maximum 16 characters):</label>
+        <label>Password:</label>
         <input type="password" th:field="*{password}" name="password" required autocomplete="off" />
 
         <label>Confirm Password:</label>
         <input type="password" name="confirmPassword" required autocomplete="off" /><br>
 
         <button type="submit">Sign Up</button>
+        <a href="/signin">Already have an account? Sign In</a>
     </form>
 </div>
 </body>
